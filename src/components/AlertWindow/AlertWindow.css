@@ -1,0 +1,15 @@
+.text-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    background-color: #111b21 !important;
+}
+.alert-btn {
+    color: rgb(233, 237, 239) !important;
+    border-radius: 10px !important;
+}
+.alert-btn:hover {
+    background-color: rgb(32, 44, 51) !important;
+}

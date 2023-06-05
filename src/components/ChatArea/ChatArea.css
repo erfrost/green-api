@@ -1,0 +1,16 @@
+.chatArea-main {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 70%;
+}
+.chat {
+    flex-grow: 1;
+    background-image: url('../../assets/chat_background.jpg');
+}
+.empty-params {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
