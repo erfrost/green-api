@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    border-top-left-radius: 10px;
 }
 .icon-group {
     display: flex;
@@ -16,4 +17,24 @@
     margin-top: 5px;
     color: rgb(174, 186, 193);
     cursor: pointer;
+    animation: iconColor-hover 0.3s ease-in-out forwards;
+}
+.icon:hover {
+    animation: iconColor-default 0.3s ease-in-out forwards;
+}
+@keyframes iconColor-default {
+    0% {
+        color: rgb(174, 186, 193);
+    }
+    100% {
+        color: white;
+    }
+}
+@keyframes iconColor-hover {
+    0% {
+        color: white;
+    }
+    100% {
+        color: rgb(174, 186, 193);
+    }
 }

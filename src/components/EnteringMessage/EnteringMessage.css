@@ -5,6 +5,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-bottom-right-radius: 10px;
 }
 .icon-message {
     font-size: 1.75rem;
@@ -39,4 +40,10 @@
     height: 35px;
     padding-top: 0 !important;
     padding-bottom: 0 !important;
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+    height: 100%;
+}
+.text-field-message div input:-internal-autofill-selected {
+    background-color: rgb(42, 57, 66) !important;
 }

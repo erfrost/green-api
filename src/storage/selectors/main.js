@@ -1,11 +1,18 @@
 import { selector } from "recoil";
 import {
   apiTokenInstanceState,
+  chatsListState,
   idInstanceState,
   messagesListState,
   phoneState,
 } from "../atoms/main";
 
+export const chatsListSelector = selector({
+  key: "chatsListSelector",
+  get: ({ get }) => get(chatsListState),
+  set: ({ set }, value) =>
+    set(chatsListState, (state) => ({ ...state, value: value })), // setter example
+});
 export const phoneSelector = selector({
   key: "phoneSelector",
   get: ({ get }) => get(phoneState),

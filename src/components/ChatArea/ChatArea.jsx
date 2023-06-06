@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./ChatArea.css";
 import AreaHeader from "../AreaHeader/AreaHeader";
 import EnteringMessage from "../enteringMessage/EnteringMessage";
@@ -9,7 +9,9 @@ import {
   messagesListState,
   phoneState,
 } from "../../storage/atoms/main";
-import { deleteMessage, getMessage } from "../../api/messages";
+import { getMessage } from "../../api/get";
+import { deleteMessage } from "../../api/delete";
+import { transformDate } from "../../utils/transformDate";
 
 const ChatArea = () => {
   const phone = useRecoilValue(phoneState);
@@ -21,30 +23,44 @@ const ChatArea = () => {
     if (phone && idInstance && apiTokenInstance) {
       try {
         const data = await getMessage(idInstance, apiTokenInstance);
-        console.log(data);
         if (data !== null) {
-          setMessagesList((prevState) => [
-            ...prevState,
-            {
-              message: data.body.messageData,
-              type: "outgoing",
-            },
-          ]);
+          if (data.body.messageData) {
+            console.log(data);
+            setMessagesList((prevState) => {
+              if (!prevState.find((item) => item.id === data.receiptId)) {
+                return [
+                  ...prevState,
+                  {
+                    id: data.receiptId,
+                    message: data?.body?.messageData?.extendedTextMessageData
+                      ?.text
+                      ? data.body.messageData.extendedTextMessageData.text
+                      : data.body.messageData.textMessageData.textMessage,
+                    type:
+                      data.body.typeWebhook === "outgoingAPIMessageReceived"
+                        ? "outgoing"
+                        : "incoming ",
+                    phone: phone,
+                    time: transformDate(data.body.timestamp),
+                  },
+                ];
+              } else return prevState;
+            });
+          }
 
           const response = await deleteMessage(
             data.receiptId,
             idInstance,
             apiTokenInstance
           );
-          console.log(response);
+          return;
         }
       } catch (error) {
         console.log(error);
       }
-    }
+    } else return;
   };
   console.log(messagesList);
-
   setInterval(get, 5000);
 
   return (
@@ -53,7 +69,28 @@ const ChatArea = () => {
       {phone && idInstance && apiTokenInstance ? (
         <>
           {" "}
-          <div className="chat"></div>
+          <div className="chat-main">
+            <div className="chat">
+              {messagesList.map((item) =>
+                item.phone === phone ? (
+                  <div
+                    className="message-container"
+                    style={
+                      item.type == "outgoing"
+                        ? { justifyContent: "flex-end" }
+                        : { justifyContent: "flex-start" }
+                    }
+                    key={item.id}
+                  >
+                    <div className="message">
+                      {item.message}
+                      <div className="time">{item.time}</div>
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
           <EnteringMessage />
         </>
       ) : (

@@ -4,14 +4,13 @@ import SentimentSatisfiedAltIcon from "@mui/icons-material/SentimentSatisfiedAlt
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import KeyboardVoiceIcon from "@mui/icons-material/KeyboardVoice";
 import { TextField } from "@mui/material";
-import { sendMessage } from "../../api/messages";
 import {
   apiTokenInstanceState,
   idInstanceState,
-  messagesListState,
   phoneState,
 } from "../../storage/atoms/main";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
+import { sendMessage } from "../../api/send";
 
 const EnteringMessage = () => {
   const [message, setMessage] = useState("");
@@ -19,10 +18,14 @@ const EnteringMessage = () => {
   const idInstance = useRecoilValue(idInstanceState);
   const apiTokenInstance = useRecoilValue(apiTokenInstanceState);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
-      sendMessage(message, phone, idInstance, apiTokenInstance);
-      setMessage("");
+      try {
+        await sendMessage(message, phone, idInstance, apiTokenInstance);
+        setMessage("");
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

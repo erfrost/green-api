@@ -1,10 +1,11 @@
 .areaHeader {
-    height: 75px;
+    height: 69px;
     background-color: rgb(32, 44, 51);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    border-top-right-radius: 10px;
 }
 .user-title {
     display: flex;
@@ -13,7 +14,7 @@
 }
 .user-name {
     font-size: 16px;
-    color: rgb(233, 237, 239);
+    color: rgb(134, 150, 160);
 }
 .options {
     display: flex;

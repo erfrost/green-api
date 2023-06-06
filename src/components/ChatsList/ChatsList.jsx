@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import "./ChatsList.css";
 import Navigation from "../navigation/navigation";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import CheckIcon from "@mui/icons-material/Check";
-import SearchIcon from "@mui/icons-material/Search";
-import { IconButton, InputAdornment, TextField } from "@mui/material";
+import AddIcCallIcon from "@mui/icons-material/AddIcCall";
+import { InputAdornment, TextField } from "@mui/material";
 import { useRecoilState } from "recoil";
-import { phoneState } from "../../storage/atoms/main";
+import { chatsListState, phoneState } from "../../storage/atoms/main";
+import { transformPhone } from "../../utils/transformPhone";
 
 const ChatsList = () => {
   const [input, setInput] = useState("");
-  const [number, setNumber] = useRecoilState(phoneState);
+  const [, setNumber] = useRecoilState(phoneState);
+  const [chatsList, setChatsList] = useRecoilState(chatsListState);
+
+  const handleKeyDown = async (e) => {
+    if (e.key === "Enter") {
+      setNumber(input);
+      setChatsList((prevState) => {
+        console.log(prevState, input);
+        if (!prevState.find((item) => item === input))
+          return [...prevState, input];
+        else return prevState;
+      });
+    }
+  };
 
   return (
     <div className="chatsList-main">
@@ -22,21 +37,53 @@ const ChatsList = () => {
           placeholder="Номер телефона получателя"
           value={input}
           onChange={(e) => setInput(e.target.value)}
+          onKeyDown={handleKeyDown}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: "rgb(174, 186, 193)" }} />
+                <AddIcCallIcon
+                  fontSize="small"
+                  sx={{ color: "rgb(174, 186, 193)" }}
+                />
               </InputAdornment>
             ),
           }}
         />
-        <IconButton className="icon-button" onClick={() => setNumber(input)}>
-          <CheckIcon sx={{ color: "rgb(174, 186, 193)" }} />
-        </IconButton>
+
+        <CheckIcon
+          onClick={() => {
+            setNumber(input),
+              setChatsList((prevState) => {
+                console.log(prevState, input);
+                if (!prevState.find((item) => item === input))
+                  return [...prevState, input];
+                else return prevState;
+              });
+          }}
+          className="icon"
+        />
       </div>
-      <div className="chats">
-        <div style={{ fontSize: "14px" }}>Нет чатов</div>
-      </div>
+      {chatsList.length ? (
+        <div className="chats">
+          {chatsList.map((item, index) => (
+            <div
+              className="chatsList-item"
+              onClick={() => setNumber(item)}
+              key={index}
+            >
+              <AccountCircleIcon
+                className="icon chatsList-icon"
+                sx={{ fontSize: "3rem" }}
+              />
+              <div className="chatsList-phone">{transformPhone(item)}</div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="no-chats">
+          <div style={{ fontSize: "14px" }}>Нет чатов</div>
+        </div>
+      )}
     </div>
   );
 };
