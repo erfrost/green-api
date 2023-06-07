@@ -9,7 +9,7 @@ import { Tooltip } from "@mui/material";
 import { useMediaQuery } from "react-responsive";
 
 const Navigation = () => {
-  const tabletDevice = useMediaQuery({ maxWidth: "910px" });
+  const tabletDevice = useMediaQuery({ maxWidth: "600px" });
 
   return (
     <div className="navigation-main">

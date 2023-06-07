@@ -11,19 +11,32 @@ import { transformPhone } from "../../utils/transformPhone";
 
 const ChatsList = () => {
   const [input, setInput] = useState("");
-  const [, setNumber] = useRecoilState(phoneState);
+  const [number, setNumber] = useRecoilState(phoneState);
   const [chatsList, setChatsList] = useRecoilState(chatsListState);
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
+      setInput("");
       setNumber(input);
-      setChatsList((prevState) => {
-        console.log(prevState, input);
+      setChatsList((prevState) => transform(prevState, input));
+    }
+  };
+
+  const transform = (prevState, input) => {
+    if (input.length === 12 || input.length === 11) {
+      if (input[0] === "8") {
+        if (!prevState.find((item) => item === "7" + input.slice(1)))
+          return [...prevState, "7" + input.slice(1)];
+        else return prevState;
+      } else if (input[0] === "+") {
+        if (!prevState.find((item) => item === input.slice(1)))
+          return [...prevState, input.slice(1)];
+        else return prevState;
+      } else if (input[0] === "7") {
         if (!prevState.find((item) => item === input))
           return [...prevState, input];
-        else return prevState;
-      });
-    }
+      } else return prevState;
+    } else return prevState;
   };
 
   return (
@@ -52,13 +65,9 @@ const ChatsList = () => {
 
         <CheckIcon
           onClick={() => {
+            setInput("");
             setNumber(input),
-              setChatsList((prevState) => {
-                console.log(prevState, input);
-                if (!prevState.find((item) => item === input))
-                  return [...prevState, input];
-                else return prevState;
-              });
+              setChatsList((prevState) => transform(prevState, input));
           }}
           className="icon"
         />
@@ -67,7 +76,9 @@ const ChatsList = () => {
         <div className="chats">
           {chatsList.map((item, index) => (
             <div
-              className="chatsList-item"
+              className={`chatsList-item ${
+                item === number ? "number-active" : ""
+              }`}
               onClick={() => setNumber(item)}
               key={index}
             >

@@ -1,0 +1,8 @@
+.error-alert {
+    position: fixed;
+    bottom: 5px;
+    left: 5px;
+    background-color: rgb(22, 11, 11) !important;
+    color: rgb(244, 199, 199) !important;
+    font-size: 16px !important;
+}

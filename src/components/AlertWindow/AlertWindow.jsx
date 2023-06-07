@@ -51,7 +51,7 @@ const AlertWindow = () => {
           />
         </div>
       </DialogContent>
-      <DialogActions>
+      <DialogActions sx={{ paddingRight: "24px" }}>
         <Button
           className="alert-btn"
           onClick={() => {

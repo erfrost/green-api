@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./ChatArea.css";
 import AreaHeader from "../AreaHeader/AreaHeader";
 import EnteringMessage from "../enteringMessage/EnteringMessage";
@@ -12,14 +12,16 @@ import {
 import { getMessage } from "../../api/get";
 import { deleteMessage } from "../../api/delete";
 import { transformDate } from "../../utils/transformDate";
+import ErrorAlert from "../ErrorAlert/ErrorAlert";
 
 const ChatArea = () => {
   const phone = useRecoilValue(phoneState);
   const idInstance = useRecoilValue(idInstanceState);
   const apiTokenInstance = useRecoilValue(apiTokenInstanceState);
   const [messagesList, setMessagesList] = useRecoilState(messagesListState);
+  const [error, setError] = useState(false);
 
-  const get = async () => {
+  async function get() {
     if (phone && idInstance && apiTokenInstance) {
       try {
         const data = await getMessage(idInstance, apiTokenInstance);
@@ -39,28 +41,27 @@ const ChatArea = () => {
                     type:
                       data.body.typeWebhook === "outgoingAPIMessageReceived"
                         ? "outgoing"
-                        : "incoming ",
-                    phone: phone,
+                        : "incoming",
+                    phone: data.body.senderData.chatId.slice(0, -5),
                     time: transformDate(data.body.timestamp),
                   },
                 ];
               } else return prevState;
             });
           }
-
           const response = await deleteMessage(
             data.receiptId,
             idInstance,
             apiTokenInstance
           );
-          return;
-        }
+        } else return;
       } catch (error) {
         console.log(error);
+        setError(true);
       }
     } else return;
-  };
-  console.log(messagesList);
+  }
+
   setInterval(get, 5000);
 
   return (
@@ -70,26 +71,30 @@ const ChatArea = () => {
         <>
           {" "}
           <div className="chat-main">
-            <div className="chat">
-              {messagesList.map((item) =>
-                item.phone === phone ? (
-                  <div
-                    className="message-container"
-                    style={
-                      item.type == "outgoing"
-                        ? { justifyContent: "flex-end" }
-                        : { justifyContent: "flex-start" }
-                    }
-                    key={item.id}
-                  >
-                    <div className="message">
-                      {item.message}
-                      <div className="time">{item.time}</div>
+            {error ? (
+              <ErrorAlert setError={setError} />
+            ) : (
+              <div className="chat">
+                {messagesList.map((item) =>
+                  item.phone === phone ? (
+                    <div
+                      className="message-container"
+                      style={
+                        item.type == "outgoing"
+                          ? { justifyContent: "flex-end" }
+                          : { justifyContent: "flex-start" }
+                      }
+                      key={item.id}
+                    >
+                      <div className="message">
+                        {item.message}
+                        <div className="time">{item.time}</div>
+                      </div>
                     </div>
-                  </div>
-                ) : null
-              )}
-            </div>
+                  ) : null
+                )}
+              </div>
+            )}
           </div>
           <EnteringMessage />
         </>

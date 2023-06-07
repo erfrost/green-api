@@ -91,6 +91,9 @@
 .chatsList-item:hover {
     background-color: rgb(52, 71, 82);
 }
+.number-active {
+    background-color: rgb(47, 64, 73);
+}
 .chatsList-phone {
     color: rgb(134, 150, 160);;
 }
