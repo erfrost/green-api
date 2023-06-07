@@ -26,7 +26,6 @@ const EnteringMessage = () => {
         setMessage("");
         await sendMessage(message, phone, idInstance, apiTokenInstance);
       } catch (error) {
-        console.log(error);
         setError(true);
       }
     }
@@ -35,7 +34,13 @@ const EnteringMessage = () => {
   return (
     <>
       <div className="enteringMessage">
-        {error ? <ErrorAlert setError={setError} /> : null}
+        {error ? (
+          <ErrorAlert
+            title="Произошла ошибка"
+            type="error"
+            setState={setError}
+          />
+        ) : null}
         <div className="options">
           <SentimentSatisfiedAltIcon className="icon icon-message" />
           <UploadFileIcon className="icon icon-message" />

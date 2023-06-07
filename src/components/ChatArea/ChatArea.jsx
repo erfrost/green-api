@@ -27,7 +27,6 @@ const ChatArea = () => {
         const data = await getMessage(idInstance, apiTokenInstance);
         if (data !== null) {
           if (data.body.messageData) {
-            console.log(data);
             setMessagesList((prevState) => {
               if (!prevState.find((item) => item.id === data.receiptId)) {
                 return [
@@ -56,7 +55,6 @@ const ChatArea = () => {
           );
         } else return;
       } catch (error) {
-        console.log(error);
         setError(true);
       }
     } else return;
@@ -72,7 +70,11 @@ const ChatArea = () => {
           {" "}
           <div className="chat-main">
             {error ? (
-              <ErrorAlert setError={setError} />
+              <ErrorAlert
+                title="Произошла ошибка"
+                type="error"
+                setState={setError}
+              />
             ) : (
               <div className="chat">
                 {messagesList.map((item) =>
@@ -99,7 +101,7 @@ const ChatArea = () => {
           <EnteringMessage />
         </>
       ) : (
-        <div className="empty-params">Укажите номер телефона получателя</div>
+        <div className="empty-params">Выберите номер телефона получателя</div>
       )}
     </div>
   );

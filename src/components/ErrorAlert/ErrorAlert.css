@@ -1,8 +1,14 @@
-.error-alert {
+.alert {
     position: fixed;
     bottom: 5px;
     left: 5px;
+    font-size: 14px !important;
+}
+.error-alert {
     background-color: rgb(22, 11, 11) !important;
     color: rgb(244, 199, 199) !important;
-    font-size: 16px !important;
+}
+.warning-alert {
+    background-color: rgb(25, 18, 7) !important;
+    color: rgb(255, 226, 183) !important;
 }

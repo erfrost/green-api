@@ -10,11 +10,11 @@ export const phoneState = atom({
 });
 export const idInstanceState = atom({
   key: "idInstanceState",
-  default: "1101828009",
+  default: "",
 });
 export const apiTokenInstanceState = atom({
   key: "apiTokenInstanceState",
-  default: "52c71a182ff34eed9bb87e757e33aca33ca372f2997645c294",
+  default: "",
 });
 export const messagesListState = atom({
   key: "messagesListState",

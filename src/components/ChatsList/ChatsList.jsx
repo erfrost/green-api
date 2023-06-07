@@ -8,41 +8,33 @@ import { InputAdornment, TextField } from "@mui/material";
 import { useRecoilState } from "recoil";
 import { chatsListState, phoneState } from "../../storage/atoms/main";
 import { transformPhone } from "../../utils/transformPhone";
+import ErrorAlert from "../ErrorAlert/ErrorAlert";
+import { validatePhone } from "../../utils/validatePhone";
 
 const ChatsList = () => {
   const [input, setInput] = useState("");
   const [number, setNumber] = useRecoilState(phoneState);
   const [chatsList, setChatsList] = useRecoilState(chatsListState);
+  const [invalidNumber, setInvalidNumber] = useState(false);
 
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       setInput("");
-      setNumber(input);
-      setChatsList((prevState) => transform(prevState, input));
+      setChatsList((prevState) => validatePhone(prevState, input));
     }
-  };
-
-  const transform = (prevState, input) => {
-    if (input.length === 12 || input.length === 11) {
-      if (input[0] === "8") {
-        if (!prevState.find((item) => item === "7" + input.slice(1)))
-          return [...prevState, "7" + input.slice(1)];
-        else return prevState;
-      } else if (input[0] === "+") {
-        if (!prevState.find((item) => item === input.slice(1)))
-          return [...prevState, input.slice(1)];
-        else return prevState;
-      } else if (input[0] === "7") {
-        if (!prevState.find((item) => item === input))
-          return [...prevState, input];
-      } else return prevState;
-    } else return prevState;
   };
 
   return (
     <div className="chatsList-main">
       <Navigation />
       <div className="search">
+        {invalidNumber ? (
+          <ErrorAlert
+            title="Неверный формат номера"
+            type="warning"
+            setState={setInvalidNumber}
+          />
+        ) : null}
         <TextField
           className="text-field"
           id="filled-basic"
@@ -66,8 +58,7 @@ const ChatsList = () => {
         <CheckIcon
           onClick={() => {
             setInput("");
-            setNumber(input),
-              setChatsList((prevState) => transform(prevState, input));
+            setChatsList((prevState) => validatePhone(prevState, input));
           }}
           className="icon"
         />
