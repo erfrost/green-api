@@ -1,4 +1,4 @@
-export const validatePhone = (prevState, input) => {
+export const validatePhone = (prevState, setInvalidNumber, input) => {
   if (input.length > 12 || input.length < 16) {
     if (input[0] === "8") {
       if (

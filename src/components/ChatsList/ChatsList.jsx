@@ -20,7 +20,9 @@ const ChatsList = () => {
   const handleKeyDown = async (e) => {
     if (e.key === "Enter") {
       setInput("");
-      setChatsList((prevState) => validatePhone(prevState, input));
+      setChatsList((prevState) =>
+        validatePhone(prevState, setInvalidNumber, input)
+      );
     }
   };
 
@@ -58,7 +60,9 @@ const ChatsList = () => {
         <CheckIcon
           onClick={() => {
             setInput("");
-            setChatsList((prevState) => validatePhone(prevState, input));
+            setChatsList((prevState) =>
+              validatePhone(prevState, setInvalidNumber, input)
+            );
           }}
           className="icon"
         />
